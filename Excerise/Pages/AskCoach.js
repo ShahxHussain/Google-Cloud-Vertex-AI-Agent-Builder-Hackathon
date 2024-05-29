@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
-import { Ionicons, Feather } from '@expo/vector-icons'; // Import an icon library, like Ionicons
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
 const Chatbot = () => {
@@ -85,7 +85,7 @@ const Chatbot = () => {
           placeholder="Ask me..."
         />
         <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-          <Feather name="send" size={24} color="black" /> {/* Send icon */}
+          <Text style={styles.sendButtonText}><Ionicons name="send-sharp" size={25} color="white" /></Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -116,6 +116,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   optionButton: {
+    width: 150,
+    height: 50,
     backgroundColor: '#F1F0F0',
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 5,
     alignItems: 'center',
-    borderColor: '#ccc',
+    borderColor: '#4285F4',
     borderWidth: 1,
   },
   optionText: {
@@ -148,6 +150,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
+    
   },
   inputContainer: {
     flexDirection: 'row',
@@ -176,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   options: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-around',
     marginVertical: 10,
   },

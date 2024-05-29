@@ -42,7 +42,11 @@ function BottomTab() {
       })}
       initialRouteName="Exercise"
     >
-      <Tab.Screen name="Exercise" component={Exercise} />
+      <Tab.Screen name="Exercise" component={Exercise} options={{ 
+        headerShown: true, // Show the header
+        headerTitle: 'FormFit', // Set the header title to "FormFit"
+        headerTitleAlign: 'start', // Align the header title to the center
+      }} />
       <Tab.Screen name="Ask Coach" component={AskCoach} options={{ headerShown: false }} />
       <Tab.Screen name="Improve Form" component={ImproveForm} options={{ headerShown: false }} />
     </Tab.Navigator>

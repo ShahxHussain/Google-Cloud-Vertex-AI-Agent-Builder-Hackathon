@@ -53,7 +53,7 @@ function Courasel() {
     <SafeAreaProvider>
       <ScrollView>
         <View style={styles.featuredContainer}><Text style={styles.headingText}>Upper Body</Text>
-          <ScrollView contentContainerStyle={styles.cardScrollView} horizontal={true} showsHorizontalScrollIndicator={false} pagingEnabled={true}>
+          <ScrollView contentContainerStyle={styles.cardScrollView} horizontal={true} showsHorizontalScrollIndicator={false} pagingEnabled={false}>
             {cardData.map((card, index) => (
               <TouchableOpacity>
                 <Card key={index} style={styles.cardContainer}>
@@ -67,7 +67,7 @@ function Courasel() {
           </ScrollView>
         </View>
         <View style={styles.featuredContainer}><Text style={styles.headingText}>Core</Text>
-          <ScrollView contentContainerStyle={styles.cardScrollView} horizontal={true} showsHorizontalScrollIndicator={false} pagingEnabled={true}>
+          <ScrollView contentContainerStyle={styles.cardScrollView} horizontal={true} showsHorizontalScrollIndicator={false} pagingEnabled={false}>
             {cardData2.map((card, index) => (
               <TouchableOpacity onPress={() => handleCategoryPress(card.category)}>
                 <Card key={index} style={styles.cardContainer}>
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 10
+    gap: 5
   },
   featuredContainer: {
     width: '100%',
