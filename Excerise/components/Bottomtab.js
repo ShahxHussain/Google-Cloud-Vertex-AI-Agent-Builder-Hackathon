@@ -1,10 +1,7 @@
-// You can import Ionicons from @expo/vector-icons if you use Expo or
-// react-native-vector-icons/Ionicons otherwise.
 import * as React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Button} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Exercise from '../Pages/Exercise';
 import AskCoach from '../Pages/AskCoach';
 import ImproveForm from '../Pages/ImproveForm';
@@ -12,7 +9,8 @@ import ImproveForm from '../Pages/ImproveForm';
 const Tab = createBottomTabNavigator();
 
 function BottomTab() {
-  const navigation = useNavigation();
+  const route = useRoute();
+  
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -31,8 +29,16 @@ function BottomTab() {
         },
         tabBarActiveTintColor: 'blue',
         tabBarInactiveTintColor: 'gray',
-        tabBarStyle: { height: 100, paddingBottom: 20 }, // Increase height and add padding
-        tabBarLabelStyle: { paddingBottom: 10, fontWeight: '600', fontSize: 12 }, // Adjust the label position
+        tabBarStyle: { 
+          height: 100, 
+          paddingBottom: 20, 
+          display: getTabBarVisibility(route) ? 'flex' : 'none', // Conditionally hide the tab bar
+        },
+        tabBarLabelStyle: { 
+          paddingBottom: 10, 
+          fontWeight: '600', 
+          fontSize: 12 
+        }, // Adjust the label position
       })}
       initialRouteName="Exercise"
     >
@@ -42,4 +48,14 @@ function BottomTab() {
     </Tab.Navigator>
   );
 }
+
+// Helper function to determine tab bar visibility
+function getTabBarVisibility(route) {
+  const routeName = route.name;
+  if (routeName === 'Ask Coach') {
+    return false;
+  }
+  return true;
+}
+
 export default BottomTab;

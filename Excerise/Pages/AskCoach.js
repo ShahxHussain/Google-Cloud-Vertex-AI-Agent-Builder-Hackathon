@@ -1,10 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Import an icon library, like Ionicons
+import { useNavigation } from '@react-navigation/native';
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const flatListRef = useRef(null);
+  const navigation = useNavigation(); // Hook to get navigation instance
 
   const handleOptionSelect = (option) => {
     const response = getBotResponse(option);
@@ -49,7 +52,23 @@ const Chatbot = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Ask Coach</Text>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Exercise')}>
+          <Ionicons name="arrow-back" size={24} color="#007BFF" />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Ask Coach</Text>
+      </View>
+      <View style={styles.options}>
+        <TouchableOpacity style={styles.optionButton} onPress={() => handleOptionSelect('Upper body')}>
+          <Text style={styles.optionText}>Upper body</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.optionButton} onPress={() => handleOptionSelect('Core')}>
+          <Text style={styles.optionText}>Core</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.optionButton} onPress={() => handleOptionSelect('Lower body')}>
+          <Text style={styles.optionText}>Lower body</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         ref={flatListRef}
         data={messages}
@@ -58,29 +77,16 @@ const Chatbot = () => {
         style={styles.messageList}
         onContentSizeChange={scrollToBottom} // Automatically scroll to bottom when content size changes (new message)
       />
-      <View style={styles.optionsAndInput}>
-        <View style={styles.options}>
-          <TouchableOpacity style={styles.optionButton} onPress={() => handleOptionSelect('Upper body')}>
-            <Text style={styles.optionText}>Upper body</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton} onPress={() => handleOptionSelect('Core')}>
-            <Text style={styles.optionText}>Core</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton} onPress={() => handleOptionSelect('Lower body')}>
-            <Text style={styles.optionText}>Lower body</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            value={input}
-            onChangeText={setInput}
-            placeholder="Type your message"
-          />
-          <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-            <Text style={styles.sendButtonText}>Send</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          value={input}
+          onChangeText={setInput}
+          placeholder="Type your message"
+        />
+        <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+          <Text style={styles.sendButtonText}>Send</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -89,32 +95,42 @@ const Chatbot = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
     backgroundColor: '#fff',
     justifyContent: 'space-between',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  backButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
   },
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 20,
+    flex: 1,
   },
   optionButton: {
     backgroundColor: '#F1F0F0',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderRadius: 10,
     marginVertical: 5,
+    marginHorizontal: 5,
     alignItems: 'center',
     borderColor: '#ccc',
     borderWidth: 1,
   },
   optionText: {
-    fontSize: 16,
+    fontSize: 14,
   },
   messageList: {
     flex: 1,
-    marginBottom: 10,
   },
   messageContainer: {
     padding: 10,
@@ -159,8 +175,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
-  optionsAndInput: {
-    marginBottom: 0,
+  options: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 10,
   },
 });
 
