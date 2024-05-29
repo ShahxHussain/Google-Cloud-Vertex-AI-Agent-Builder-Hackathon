@@ -55,6 +55,9 @@ function getTabBarVisibility(route) {
   if (routeName === 'Ask Coach') {
     return false;
   }
+  if (routeName === 'Improve Form') {
+    return false;
+  }
   return true;
 }
 

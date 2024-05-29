@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Import an icon library, like Ionicons
+import { Ionicons, Feather } from '@expo/vector-icons'; // Import an icon library, like Ionicons
 import { useNavigation } from '@react-navigation/native';
 
 const Chatbot = () => {
@@ -82,10 +82,10 @@ const Chatbot = () => {
           style={styles.input}
           value={input}
           onChangeText={setInput}
-          placeholder="Type your message"
+          placeholder="Ask me..."
         />
         <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-          <Text style={styles.sendButtonText}>Send</Text>
+          <Feather name="send" size={24} color="black" /> {/* Send icon */}
         </TouchableOpacity>
       </View>
     </View>
