@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
-import { Button, Card, Text } from 'react-native-paper';
-import { View, Image, ImageBackground, StyleSheet, ScrollView } from 'react-native';
+import React from 'react';
+import { Card, Text } from 'react-native-paper';
+import { View, ImageBackground, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Searchbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
 function Courasel() {
     const cardData = [
         {
@@ -12,20 +12,23 @@ function Courasel() {
           category: '5 Warm-ups for the Upper-body',
           imageUrl: require('../assets/images/Frame 1.png'),
           time: '15 minutes | 3 sets',
+          videoUrl: require('../assets/videos/superman.gif'),
         },
         {
           id: 2,
           category: 'Sit-ups in 10 minutes',
           imageUrl: require('../assets/images/Frame 2.png'),
           time: '10 minutes | 3 sets',
+          videoUrl: require('../assets/videos/legraises.gif'), // Add video URL
         },
         {
           id: 3,
           category: 'Pushup for Beginnes',
           imageUrl: require('../assets/images/Frame 3.png'),
           time: '15 minutes | 3 sets',
+          videoUrl: require('../assets/videos/pushups.gif'), // Add video URL
         },
-      ]
+      ];
 
       const cardData2 = [
         {
@@ -33,49 +36,59 @@ function Courasel() {
           category: 'Plank with Shoulder Taps',
           imageUrl: require('../assets/images/Frame 2_1.png'),
           time: '6 minutes | 3 sets',
+          videoUrl: require('../assets/videos/pushups.gif'), // Add video URL
         },
         {
           id: 2,
           category: 'Mountain Climber for Beginners',
           imageUrl: require('../assets/images/Frame 2_2.png'),
           time: '15 minutes | 3 sets',
+          videoUrl: require('../assets/videos/curl.gif'), // Add video URL
         },
         {
           id: 3,
           category: 'Lunges with Light Weights',
           imageUrl: require('../assets/images/Frame 2_3.png'),
           time: '15 minutes | 3 sets',
+          videoUrl: require('../assets/videos/squats.gif'), // Add video URL
         },
-      ]
+      ];
+
   const navigation = useNavigation();
+
+  const handleCardPress = (videoUrl) => {
+    navigation.navigate('VideoScreen', { videoUrl });
+  };
 
   return (
     <SafeAreaProvider>
       <ScrollView>
-        <View style={styles.featuredContainer}><Text style={styles.headingText}>Upper Body</Text>
+        <View style={styles.featuredContainer}>
+          <Text style={styles.headingText}>Upper Body</Text>
           <ScrollView contentContainerStyle={styles.cardScrollView} horizontal={true} showsHorizontalScrollIndicator={false} pagingEnabled={false}>
-            {cardData.map((card, index) => (
-              <TouchableOpacity>
-                <Card key={index} style={styles.cardContainer}>
-              <ImageBackground style={styles.cardImage} resizeMode='cover' source={card.imageUrl}>
-                <Text style={styles.cardTitle}>{card.category}</Text>
-                <Text style={styles.cardTime}>{card.time}</Text> 
-              </ImageBackground>
-            </Card>
+            {cardData.map((card) => (
+              <TouchableOpacity key={card.id} onPress={() => handleCardPress(card.videoUrl)}>
+                <Card style={styles.cardContainer}>
+                  <ImageBackground style={styles.cardImage} resizeMode='cover' source={card.imageUrl}>
+                    <Text style={styles.cardTitle}>{card.category}</Text>
+                    <Text style={styles.cardTime}>{card.time}</Text>
+                  </ImageBackground>
+                </Card>
               </TouchableOpacity>
             ))}
           </ScrollView>
         </View>
-        <View style={styles.featuredContainer}><Text style={styles.headingText}>Core</Text>
+        <View style={styles.featuredContainer}>
+          <Text style={styles.headingText}>Core</Text>
           <ScrollView contentContainerStyle={styles.cardScrollView} horizontal={true} showsHorizontalScrollIndicator={false} pagingEnabled={false}>
-            {cardData2.map((card, index) => (
-              <TouchableOpacity onPress={() => handleCategoryPress(card.category)}>
-                <Card key={index} style={styles.cardContainer}>
-              <ImageBackground style={styles.cardImage} resizeMode='cover' source={card.imageUrl}>
-                <Text style={styles.cardTitle}>{card.category}</Text>
-                <Text style={styles.cardTime}>{card.time}</Text> 
-              </ImageBackground>
-            </Card>
+            {cardData2.map((card) => (
+              <TouchableOpacity key={card.id} onPress={() => handleCardPress(card.videoUrl)}>
+                <Card style={styles.cardContainer}>
+                  <ImageBackground style={styles.cardImage} resizeMode='cover' source={card.imageUrl}>
+                    <Text style={styles.cardTitle}>{card.category}</Text>
+                    <Text style={styles.cardTime}>{card.time}</Text>
+                  </ImageBackground>
+                </Card>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -84,6 +97,7 @@ function Courasel() {
     </SafeAreaProvider>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -99,8 +113,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   cardScrollView: {
-    display: 'flex', 
-    flexDirection: 'row', 
+    display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 5
@@ -185,8 +199,9 @@ const styles = StyleSheet.create({
     height: 20,
     fontWeight: '700',
     fontSize: 20,
-    position: 'absolute', 
+    position: 'absolute',
     right: 20
   }
 });
+
 export default Courasel;
