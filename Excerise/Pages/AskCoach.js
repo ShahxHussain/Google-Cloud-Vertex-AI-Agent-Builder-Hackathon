@@ -1,40 +1,66 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
   const flatListRef = useRef(null);
   const navigation = useNavigation(); // Hook to get navigation instance
 
-  const handleOptionSelect = (option) => {
-    const response = getBotResponse(option);
-    setMessages([...messages, { type: 'user', text: option }, { type: 'bot', text: response }]);
+  useEffect(() => {
+    console.log("Updated Messages:", messages); // Log messages whenever they update
+  }, [messages]);
+
+  const handleOptionSelect = async (option) => {
+    await fetchBotResponse(option);
     setInput('');
     scrollToBottom(); // Scroll to the bottom when a new message is added
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim()) {
-      const response = getBotResponse(input);
-      setMessages([...messages, { type: 'user', text: input }, { type: 'bot', text: response }]);
+      const userMessage = input;
       setInput('');
+      await fetchBotResponse(userMessage);
       scrollToBottom(); // Scroll to the bottom when a new message is added
     }
   };
 
-  const getBotResponse = (prompt) => {
-    switch (prompt.toLowerCase()) {
-      case 'upper body':
-        return 'Upper body exercises include push-ups, pull-ups, and shoulder presses.';
-      case 'core':
-        return 'Core exercises include planks, sit-ups, and Russian twists.';
-      case 'lower body':
-        return 'Lower body exercises include squats, lunges, and deadlifts.';
-      default:
-        return 'This is a static response to your prompt: ' + prompt;
+  const fetchBotResponse = async (prompt) => {
+    setMessages((prevMessages) => [...prevMessages, { type: 'user', text: prompt }]);
+    setLoading(true); // Show loading indicator
+
+    try {
+      const response = await fetch('https://formfit-49a7aabb3be8.herokuapp.com/api/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log("The Bot data is :", data);
+
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { type: 'bot', text: data.bot }, // Correct property accessed here
+      ]);
+    } catch (error) {
+      console.error('Error:', error);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { type: 'bot', text: 'Error fetching response. Please try again later.' },
+      ]);
+    } finally {
+      setLoading(false); // Hide loading indicator
     }
   };
 
@@ -77,6 +103,11 @@ const Chatbot = () => {
         style={styles.messageList}
         onContentSizeChange={scrollToBottom} // Automatically scroll to bottom when content size changes (new message)
       />
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#007BFF" />
+        </View>
+      )}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -85,7 +116,7 @@ const Chatbot = () => {
           placeholder="Ask me..."
         />
         <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-          <Text style={styles.sendButtonText}><Ionicons name="send-sharp" size={25} color="white" /></Text>
+          <Ionicons name="send-sharp" size={25} color="white" />
         </TouchableOpacity>
       </View>
     </View>
@@ -150,7 +181,6 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
-    
   },
   inputContainer: {
     flexDirection: 'row',
@@ -181,6 +211,11 @@ const styles = StyleSheet.create({
   options: {
     flexDirection: 'column',
     justifyContent: 'space-around',
+    marginVertical: 10,
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginVertical: 10,
   },
 });
